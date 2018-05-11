@@ -19,21 +19,17 @@ async def on_ready():
     print('------')
 
 
-@bot.command()
-async def addreact(key_to_add: str, *text_to_add):
+@bot.command(pass_context="True")
+async def addreact(ctx, key_to_add: str):
     print("this is to see if this even gets hit")
-    db.insert({"key": key_to_add, "text": text_to_add})
-
-    for index in db:
-        print(index)
-
+    key_len = len(key_to_add) + 11
+    msg_to_add = ctx.message.content[key_len:]
+    db.insert({"key": key_to_add, "text": msg_to_add})
 
 @bot.command()
 async def delreact(key_to_remove: str):
     print("this is to see if this even gets hit")
     db.remove(query_words.key == key_to_remove)
-    for index in db:
-        print(index)
 
 
 @bot.command()
@@ -50,8 +46,7 @@ async def on_message(message):
     for item in response_words:
         if item["key"] in message.content.lower():
             print("found message")
-            msg_to_be_sent = ' '.join(item["text"])
-            await bot.send_message(message.channel, msg_to_be_sent)
+            await bot.send_message(message.channel, item["text"])
     await bot.process_commands(message)
     return
 
