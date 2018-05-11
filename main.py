@@ -20,9 +20,10 @@ async def on_ready():
 
 
 @bot.command()
-async def addreact(key_to_add: str, *text_to_add: str):
+async def addreact(key_to_add: str, *text_to_add):
     print("this is to see if this even gets hit")
     db.insert({"key": key_to_add, "text": text_to_add})
+
     for index in db:
         print(index)
 
@@ -42,15 +43,15 @@ async def test():
 
 @bot.event
 async def on_message(message):
-    if message.author == robo_thatcher.user:
+    if message.author == bot.user:
         await bot.process_commands(message)
         return
     response_words: list = db.search(query_words.key.exists())
     for item in response_words:
         if item["key"] in message.content.lower():
             print("found message")
-            await bot.send_message(message.channel, item["text"])
-            await bot.process_commands(message)
+            msg_to_be_sent = ' '.join(item["text"])
+            await bot.send_message(message.channel, msg_to_be_sent)
     await bot.process_commands(message)
     return
 
