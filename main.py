@@ -51,4 +51,4 @@ async def on_message(message):
     return
 
 
-bot.run('NDQzOTA1MzA2Mzc3MDYwMzUy.DdUbYQ.zokQMbnOzT5npCBhS2VVOIB_42E')
+bot.run('tgulitl')
